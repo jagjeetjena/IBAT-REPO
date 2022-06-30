@@ -1073,7 +1073,7 @@ contract BattleInfinity is ERC20, Ownable {
 
     address public BUSD = address(0x8301F2213c0eeD49a7E28Ae4c3e91722919B8B47); //BUSD
 
-    uint256 public swapTokensAtAmount = 2000000 * (10**9);
+    uint256 public swapTokensAtAmount = 200000 * (10**9);
     
     mapping(address => bool) public _isBlacklisted;
 
