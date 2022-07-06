@@ -919,9 +919,6 @@ contract BattleInfinity is ERC20, Ownable {
     address public pinkAntiBot_  = 0xbb06F5C7689eA93d9DeACCf4aF8546C4Fe0Bf1E5;
     address public firstVerifier = 0x84dC22340B4Dc954E9663BB0F29caF4a6063acb7;
 
-    // use by default 300,000 gas 
-    uint256 public gasForProcessing = 300000;
-
     modifier onlyfirstVerifier() {
         require(_msgSender() == firstVerifier, "Ownable: caller is not the first voter");
         _;
@@ -951,8 +948,6 @@ contract BattleInfinity is ERC20, Ownable {
     event SetAutomatedMarketMakerPair(address indexed pair, bool indexed value);
 
     event LiquidityWalletUpdated(address indexed newLiquidityWallet, address indexed oldLiquidityWallet);
-
-    event GasForProcessingUpdated(uint256 indexed newValue, uint256 indexed oldValue);
 
     event SwapAndLiquify(
         uint256 tokensSwapped,
@@ -1108,14 +1103,6 @@ contract BattleInfinity is ERC20, Ownable {
         automatedMarketMakerPairs[pair] = value;
 
         emit SetAutomatedMarketMakerPair(pair, value);
-    }
-
-
-    function updateGasForProcessing(uint256 newValue) public onlyOwner {
-        require(newValue >= 200000 && newValue <= 500000, "BattleInfinity: gasForProcessing must be between 200,000 and 500,000");
-        require(newValue != gasForProcessing, "BattleInfinity: Cannot update gasForProcessing to same value");
-        emit GasForProcessingUpdated(newValue, gasForProcessing);
-        gasForProcessing = newValue;
     }
 
     function isExcludedFromFees(address account) public view returns(bool) {
