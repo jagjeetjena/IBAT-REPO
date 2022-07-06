@@ -1266,8 +1266,9 @@ contract BattleInfinity is ERC20, Ownable {
         );
 
     }
-
+    
     function recoverothertokens(address tokenAddress, uint256 tokenAmount) public  onlyOwner {
+        require(tokenAddress != address(this), "cannot be same contract address");
         IERC20(tokenAddress).transfer(owner(), tokenAmount);
     }
 
