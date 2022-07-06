@@ -1,4 +1,4 @@
-pragma solidity ^0.8.1;
+pragma solidity 0.8.7;
 
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP.
@@ -819,181 +819,6 @@ interface IUniswapV2Pair {
 
 
 
-
-/*
-MIT License
-
-Copyright (c) 2018 requestnetwork
-Copyright (c) 2018 Fragments, Inc.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
-
-
-
-/**
- * @title SafeMathInt
- * @dev Math operations for int256 with overflow safety checks.
- */
-library SafeMathInt {
-    int256 private constant MIN_INT256 = int256(1) << 255;
-    int256 private constant MAX_INT256 = ~(int256(1) << 255);
-
-    /**
-     * @dev Multiplies two int256 variables and fails on overflow.
-     */
-    function mul(int256 a, int256 b) internal pure returns (int256) {
-        int256 c = a * b;
-
-        // Detect overflow when multiplying MIN_INT256 with -1
-        require(c != MIN_INT256 || (a & MIN_INT256) != (b & MIN_INT256));
-        require((b == 0) || (c / b == a));
-        return c;
-    }
-
-    /**
-     * @dev Division of two int256 variables and fails on overflow.
-     */
-    function div(int256 a, int256 b) internal pure returns (int256) {
-        // Prevent overflow when dividing MIN_INT256 by -1
-        require(b != -1 || a != MIN_INT256);
-
-        // Solidity already throws when dividing by 0.
-        return a / b;
-    }
-
-    /**
-     * @dev Subtracts two int256 variables and fails on overflow.
-     */
-    function sub(int256 a, int256 b) internal pure returns (int256) {
-        int256 c = a - b;
-        require((b >= 0 && c <= a) || (b < 0 && c > a));
-        return c;
-    }
-
-    /**
-     * @dev Adds two int256 variables and fails on overflow.
-     */
-    function add(int256 a, int256 b) internal pure returns (int256) {
-        int256 c = a + b;
-        require((b >= 0 && c >= a) || (b < 0 && c < a));
-        return c;
-    }
-
-    /**
-     * @dev Converts to absolute value, and fails on overflow.
-     */
-    function abs(int256 a) internal pure returns (int256) {
-        require(a != MIN_INT256);
-        return a < 0 ? -a : a;
-    }
-
-
-    function toUint256Safe(int256 a) internal pure returns (uint256) {
-        require(a >= 0);
-        return uint256(a);
-    }
-}
-
-
-
-
-
-
-/**
- * @title SafeMathUint
- * @dev Math operations with safety checks that revert on error
- */
-library SafeMathUint {
-  function toInt256Safe(uint256 a) internal pure returns (int256) {
-    int256 b = int256(a);
-    require(b >= 0);
-    return b;
-  }
-}
-
-
-
-
-library IterableMapping {
-    // Iterable mapping from address to uint;
-    struct Map {
-        address[] keys;
-        mapping(address => uint) values;
-        mapping(address => uint) indexOf;
-        mapping(address => bool) inserted;
-    }
-
-    function get(Map storage map, address key) public view returns (uint) {
-        return map.values[key];
-    }
-
-    function getIndexOfKey(Map storage map, address key) public view returns (int) {
-        if(!map.inserted[key]) {
-            return -1;
-        }
-        return int(map.indexOf[key]);
-    }
-
-    function getKeyAtIndex(Map storage map, uint index) public view returns (address) {
-        return map.keys[index];
-    }
-
-
-
-    function size(Map storage map) public view returns (uint) {
-        return map.keys.length;
-    }
-
-    function set(Map storage map, address key, uint val) public {
-        if (map.inserted[key]) {
-            map.values[key] = val;
-        } else {
-            map.inserted[key] = true;
-            map.values[key] = val;
-            map.indexOf[key] = map.keys.length;
-            map.keys.push(key);
-        }
-    }
-
-    function remove(Map storage map, address key) public {
-        if (!map.inserted[key]) {
-            return;
-        }
-
-        delete map.inserted[key];
-        delete map.values[key];
-
-        uint index = map.indexOf[key];
-        uint lastIndex = map.keys.length - 1;
-        address lastKey = map.keys[lastIndex];
-
-        map.indexOf[lastKey] = index;
-        delete map.indexOf[key];
-
-        map.keys[index] = lastKey;
-        map.keys.pop();
-    }
-}
-
-
-
 // pragma solidity >=0.5.0;
 
 
@@ -1052,9 +877,7 @@ interface IUniswapV2Router02 is IUniswapV2Router01 {
 
 // SPDX-License-Identifier: MIT
 
-//
 // BattleInfinity!.
-//
 
 
 contract BattleInfinity is ERC20, Ownable {
@@ -1069,9 +892,8 @@ contract BattleInfinity is ERC20, Ownable {
 
     uint256 internal totaltokensupply = 10000000000 * (10**9);
 
-    address public deadWallet = 0x000000000000000000000000000000000000dEaD;
 
-    address public BUSD = address(0x8301F2213c0eeD49a7E28Ae4c3e91722919B8B47); //BUSD
+    address public deadWallet = 0x000000000000000000000000000000000000dEaD;
 
     uint256 public swapTokensAtAmount = 200000 * (10**9);
     
@@ -1105,7 +927,7 @@ contract BattleInfinity is ERC20, Ownable {
         _;
     }
 
-     // exlcude from fees and max transaction amount
+     // exclude from fees and max transaction amount
     mapping (address => bool) private _isExcludedFromFees;
 
     mapping (address => uint256) public antiDump;
@@ -1135,7 +957,7 @@ contract BattleInfinity is ERC20, Ownable {
     event SwapAndLiquify(
         uint256 tokensSwapped,
         uint256 ethReceived,
-        uint256 tokensIntoLiqudity
+        uint256 tokensIntoLiquidity
     );
 
 
@@ -1186,6 +1008,7 @@ contract BattleInfinity is ERC20, Ownable {
 
     function updateUniswapV2Router(address newAddress) public onlyOwner {
         require(newAddress != address(uniswapV2Router), "BattleInfinity: The router already has that address");
+        require(newAddress != address(0), "new address is zero address");
         emit UpdateUniswapV2Router(newAddress, address(uniswapV2Router));
         uniswapV2Router = IUniswapV2Router02(newAddress);
         address _uniswapV2Pair = IUniswapV2Factory(uniswapV2Router.factory())
@@ -1213,11 +1036,13 @@ contract BattleInfinity is ERC20, Ownable {
     }
 
     function setFoundationWallet(address payable wallet) external onlyOwner{
+        require(wallet != address(0), "wallet is zero address");
         _foundationWalletAddress = wallet;
     }
 
 
     function setGlobleStakeWallet(address payable wallet) external onlyOwner{
+        require(wallet != address(0), "wallet is zero address");
         _globleStakeWalletAddress = wallet;
     }
 
@@ -1333,7 +1158,7 @@ contract BattleInfinity is ERC20, Ownable {
                 "AntiBot: Buy Banned!"
             );
             if (launchTime + 180 seconds >= block.timestamp)
-                // don't allow sell for 180 seconds afer launch
+                // don't allow sell for 180 seconds after launch
                 require(
                     to != uniswapV2Pair,
                     "AntiBot: Sell Banned!"
@@ -1460,27 +1285,9 @@ contract BattleInfinity is ERC20, Ownable {
     }
 
    
-    function recoveretoken(address payable destination) public onlyOwner {
+    function recovertoken(address payable destination) public onlyOwner {
+        require(destination != address(0), "destination is zero address");
         destination.transfer(address(this).balance);
-    }
-
-    function swapTokensForBUSD(uint256 tokenAmount) private {
-
-        address[] memory path = new address[](3);
-        path[0] = address(this);
-        path[1] = uniswapV2Router.WETH();
-        path[2] = BUSD;
-
-        _approve(address(this), address(uniswapV2Router), tokenAmount);
-
-        // make the swap
-        uniswapV2Router.swapExactTokensForTokensSupportingFeeOnTransferTokens(
-            tokenAmount,
-            0,
-            path,
-            address(this),
-            block.timestamp
-        );
     }
 
     function addLiquidity(uint256 tokenAmount, uint256 ethAmount) private {
