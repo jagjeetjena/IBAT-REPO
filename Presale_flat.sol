@@ -1210,7 +1210,7 @@ contract Presale is Ownable {
     bool public isPresaleOpen = true;
 
     //@dev ERC20 token address and decimals
-    address public tokenAddress=0x2cD96e8C3FF6b5E01169F6E3b61D28204E7810Bb;
+    address public tokenAddress=insert token address;
     uint256 public tokenDecimals = 9;
 
     //@dev amount of tokens per ether 100 indicates 1 token per eth
@@ -1227,7 +1227,7 @@ contract Presale is Ownable {
     uint256 public hardcap = 7000*1e18;
     address private dev;
     uint256 private MaxValue;
-    ITimeLockedWalletFactory walletFactory =ITimeLockedWalletFactory(0xe8B7D06eEDE1c339e17663f0eCEf641d772917a5);
+    ITimeLockedWalletFactory walletFactory =ITimeLockedWalletFactory(insert factory address);
     //@dev max and min token buy limit per account
     uint256 public minEthLimit = 1000000000000000;
     uint256 public maxEthLimit = 10000000000000000000;
